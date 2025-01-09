@@ -85,6 +85,11 @@ fetch_last_updated() {
 
 download_and_extract_latest_release() {
 	local repo_url="$1"
+	if [[ $repo_url != *"github.com"* ]]; then
+		echo "Unsupported URL: $repo_url"
+		return
+	fi
+
 	local repo_name=$(echo "$repo_url" | awk -F'github.com/' '{print $2}')
 	local latest_release_urls=$(curl -s "https://api.github.com/repos/${repo_name}/releases/latest" | grep "browser_download_url" | cut -d '"' -f 4)
 
